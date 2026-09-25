@@ -2,7 +2,7 @@ name: Listing watcher
 
 on:
   schedule:
-    - cron: "*/15 * * * *"   # every 15 minutes (GitHub may delay runs a bit)
+    - cron: "*/5 * * * *"   # every 5 minutes (GitHub may delay runs a bit)
   workflow_dispatch:          # lets you run it manually from the Actions tab
     inputs:
       test:
