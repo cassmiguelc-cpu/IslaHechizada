@@ -7,6 +7,7 @@ import json
 import os
 import re
 import sys
+import time
 from pathlib import Path
 from urllib.parse import urljoin, urlparse
 
@@ -15,6 +16,8 @@ from bs4 import BeautifulSoup
 
 URL = os.environ.get("WATCH_URL")  # set as a GitHub secret
 STATE_FILE = Path(__file__).parent / "seen.json"
+HEALTH_FILE = Path(__file__).parent / "health.json"
+BLOCKED_ALERT_AFTER = 12  # consecutive blocked runs (~1 hour at 5-min checks)
 NTFY_TOPIC = os.environ.get("NTFY_TOPIC")  # set as a GitHub secret
 NOTIFY_ON_AVAILABLE = os.environ.get("NOTIFY_ON_AVAILABLE", "true") == "true"
 
@@ -24,9 +27,47 @@ SIZE_RE = re.compile(r"(\d+)\s*m\s*(?:2|²)")
 ROOMS_RE = re.compile(r"(\d+)\s*vær", re.I)
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                  "(KHTML, like Gecko) Chrome/126.0 Safari/537.36",
-    "Accept-Language": "da-DK,da;q=0.9,en;q=0.8",
+                  "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,"
+              "image/avif,image/webp,*/*;q=0.8",
+    "Accept-Language": "da-DK,da;q=0.9,en-US;q=0.8,en;q=0.7",
+    "Accept-Encoding": "gzip, deflate",
+    "Upgrade-Insecure-Requests": "1",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "none",
+    "Sec-Fetch-User": "?1",
 }
+TEMPORARY_ERRORS = {403, 406, 408, 425, 429, 500, 502, 503, 504}
+
+
+def load_health():
+    try:
+        return json.loads(HEALTH_FILE.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {"blocked_runs": 0, "alerted": False}
+
+
+def save_health(h):
+    HEALTH_FILE.write_text(json.dumps(h, indent=2), encoding="utf-8")
+
+
+def fetch_page():
+    """Return the page HTML, or None if the site is temporarily refusing us."""
+    for attempt in range(2):
+        try:
+            resp = requests.get(URL, headers=HEADERS, timeout=30)
+        except requests.RequestException as e:
+            print(f"Attempt {attempt + 1}: network error ({type(e).__name__})")
+        else:
+            if resp.status_code not in TEMPORARY_ERRORS:
+                resp.raise_for_status()
+                print(f"HTTP {resp.status_code}, {len(resp.text)} chars")
+                return resp.text
+            print(f"Attempt {attempt + 1}: HTTP {resp.status_code}")
+        if attempt == 0:
+            time.sleep(20)
+    return None
 
 
 def norm(t):
@@ -104,7 +145,8 @@ def notify(title, message, link):
     requests.post(
         f"https://ntfy.sh/{NTFY_TOPIC}",
         data=message.encode("utf-8"),
-        headers={"Title": title.encode("utf-8"), "Click": urljoin(URL, link), "Tags": "house"},
+        headers={"Title": title.encode("utf-8"), "Click": urljoin(URL, link) if link else URL,
+                 "Tags": "house"},
         timeout=20,
     )
 
@@ -112,10 +154,23 @@ def notify(title, message, link):
 def main():
     if not URL:
         sys.exit("WATCH_URL secret is not set.")
-    resp = requests.get(URL, headers=HEADERS, timeout=30)
-    resp.raise_for_status()
-    html = resp.text
-    print(f"HTTP {resp.status_code}, {len(html)} chars")
+    health = load_health()
+    html = fetch_page()
+    if html is None:
+        health["blocked_runs"] = health.get("blocked_runs", 0) + 1
+        print(f"Site refused the request; skipping this run "
+              f"({health['blocked_runs']} in a row).")
+        if health["blocked_runs"] >= BLOCKED_ALERT_AFTER and not health.get("alerted"):
+            notify("⚠️ Listing watcher is being blocked",
+                   "The site has refused every check for about an hour. "
+                   "You may miss new listings until it recovers.", "")
+            health["alerted"] = True
+        save_health(health)
+        return
+    if health.get("alerted"):
+        notify("✅ Listing watcher is working again", "Checks are getting through again.", "")
+    if health.get("blocked_runs") or health.get("alerted"):
+        save_health({"blocked_runs": 0, "alerted": False})
     print(f"Listing IDs found in raw HTML: {len(set(CASE_RE.findall(html)))}")
     current = parse_listings(html)
 
