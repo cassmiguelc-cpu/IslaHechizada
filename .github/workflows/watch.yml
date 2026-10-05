@@ -2,7 +2,7 @@ name: Listing watcher
 
 on:
   schedule:
-    - cron: "*/5 * * * *"   # every 5 minutes (GitHub may delay runs a bit)
+    - cron: "*/15 * * * *"   # every 15 minutes (GitHub may delay runs a bit)
   workflow_dispatch:          # lets you run it manually from the Actions tab
     inputs:
       test:
@@ -12,6 +12,10 @@ on:
 
 permissions:
   contents: write             # needed to save seen.json back to the repo
+
+concurrency:                  # never let two checks run at the same time
+  group: listing-watcher
+  cancel-in-progress: false
 
 jobs:
   check:
@@ -31,7 +35,6 @@ jobs:
         run: |
           git config user.name "listing-watcher"
           git config user.email "actions@users.noreply.github.com"
-          git add seen.json
+          for f in seen.json health.json; do [ -f "$f" ] && git add "$f"; done
           git diff --cached --quiet || git commit -m "Update seen listings"
           git push
-
