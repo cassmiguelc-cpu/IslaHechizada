@@ -66,13 +66,13 @@
     "status": "Reserveret"
   },
   "f5a780dd-7f18-42ad-8557-ed2dc01c062a": {
-    "status": "Ledig"
+    "status": "Reserveret"
   },
   "6c0ed0c5-006e-4cf5-986d-ba04e5b984ea": {
     "status": "Reserveret"
   },
   "9acd13c8-83ab-4e50-940d-0af148c23b7e": {
-    "status": "Reserveret"
+    "status": "Udlejet"
   },
   "3a1a63e5-73be-46e6-a086-713f29bb1ffa": {
     "status": "Udlejet"
@@ -90,10 +90,10 @@
     "status": "Reserveret"
   },
   "e49bae37-9b58-4fbe-aa74-2581d3cdfd05": {
-    "status": "Reserveret"
+    "status": "Udlejet"
   },
   "2bece092-d340-4f73-a0ff-424fbaf3ee9c": {
-    "status": "Reserveret"
+    "status": "Udlejet"
   },
   "bffcbd2f-4086-4268-8d82-3c1f20d9e840": {
     "status": "Reserveret"
@@ -111,6 +111,9 @@
     "status": "Reserveret"
   },
   "3abd7692-3c12-4213-ba16-014efc765210": {
+    "status": "Reserveret"
+  },
+  "c217bc97-7d57-4e66-b394-d1837d5fdd2c": {
     "status": "Reserveret"
   }
 }
