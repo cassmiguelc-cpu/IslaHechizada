@@ -66,7 +66,7 @@
     "status": "Reserveret"
   },
   "f5a780dd-7f18-42ad-8557-ed2dc01c062a": {
-    "status": "Ledig"
+    "status": "Reserveret"
   },
   "6c0ed0c5-006e-4cf5-986d-ba04e5b984ea": {
     "status": "Udlejet"
@@ -135,7 +135,7 @@
     "status": "Reserveret"
   },
   "2293e38a-5994-46f4-a3b5-07e3972799f8": {
-    "status": "Reserveret"
+    "status": "Ledig"
   },
   "71232b6c-de34-48d7-873d-192245020477": {
     "status": "Reserveret"
@@ -147,6 +147,9 @@
     "status": "Reserveret"
   },
   "436bddfd-f590-431d-8277-cbf437455067": {
+    "status": "Reserveret"
+  },
+  "b0028a61-f51c-49e8-85ee-3dc240e2c6a8": {
     "status": "Reserveret"
   }
 }
