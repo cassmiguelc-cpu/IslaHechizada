@@ -129,7 +129,7 @@
     "status": "Reserveret"
   },
   "3d6e3dc0-5ed1-4a6a-8c47-579eecc4e05f": {
-    "status": "Ledig"
+    "status": "Reserveret"
   },
   "7d90613b-3397-426e-85ad-8f2447790b24": {
     "status": "Reserveret"
@@ -160,5 +160,8 @@
   },
   "6342bbac-00bb-4aa9-a7c9-cedf8b7c4cb3": {
     "status": "Ledig"
+  },
+  "8f1e5518-129f-44d7-90f2-03f54b54839c": {
+    "status": "Reserveret"
   }
 }
