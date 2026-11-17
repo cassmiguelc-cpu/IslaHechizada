@@ -153,7 +153,7 @@
     "status": "Reserveret"
   },
   "b6fac557-010b-4ebe-86c5-8b2605b3fded": {
-    "status": "Reserveret"
+    "status": "Udlejet"
   },
   "77961b10-3a3f-4adf-bf08-bf46e2f93030": {
     "status": "Reserveret"
@@ -165,6 +165,15 @@
     "status": "Reserveret"
   },
   "3a5c37ea-76b8-4d96-ab0f-af7615bcf751": {
+    "status": "Reserveret"
+  },
+  "6c643ed9-6c4a-4fae-b630-1e8dd56cf9f6": {
+    "status": "Reserveret"
+  },
+  "eb38f3b1-9365-4c92-b8cc-82eaf4a37aad": {
+    "status": "Reserveret"
+  },
+  "942f36f7-b808-41b9-9241-564b70af83e8": {
     "status": "Reserveret"
   }
 }
