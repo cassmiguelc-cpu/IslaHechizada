@@ -168,13 +168,13 @@
     "status": "Udlejet"
   },
   "6c643ed9-6c4a-4fae-b630-1e8dd56cf9f6": {
-    "status": "Reserveret"
+    "status": "Udlejet"
   },
   "eb38f3b1-9365-4c92-b8cc-82eaf4a37aad": {
-    "status": "Reserveret"
+    "status": "Udlejet"
   },
   "942f36f7-b808-41b9-9241-564b70af83e8": {
-    "status": "Reserveret"
+    "status": "Udlejet"
   },
   "885ede54-e453-47f9-9a06-beed39e14181": {
     "status": "Reserveret"
@@ -183,6 +183,9 @@
     "status": "Reserveret"
   },
   "dbb25e50-7397-45a1-8e50-c798d6f597a5": {
+    "status": "Reserveret"
+  },
+  "44d4afb3-14ff-4e49-a557-4ae5173e0e39": {
     "status": "Reserveret"
   }
 }
